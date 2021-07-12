@@ -13,7 +13,6 @@ namespace iCloud.Sync.App.net40
 
         private static void Main(string[] args)
         {
-            SignIn();
         }
 
         private static void SignIn()
