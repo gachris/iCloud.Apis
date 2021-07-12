@@ -27,6 +27,7 @@
 		<DefineConstants Condition="'$(TargetFramework)'=='net40'">net40</DefineConstants>
 		<DefineConstants Condition="'$(TargetFramework)'!='net40'">others_frameworks</DefineConstants>
 		<RepositoryUrl>https://github.com/gachris/iCloud.Apis/tree/master/Api/iCloud.Core.Api</RepositoryUrl>
+		<Authors>gachris</Authors>
 	</PropertyGroup>
 
 	<Target Name="CopyPackage" AfterTargets="Pack" Condition=" '$(Configuration)' == 'Release'">

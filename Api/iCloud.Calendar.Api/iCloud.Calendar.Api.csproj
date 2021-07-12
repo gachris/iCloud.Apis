@@ -23,20 +23,25 @@
 		<DefineConstants Condition="'$(TargetFramework)'=='net40'">net40</DefineConstants>
 		<DefineConstants Condition="'$(TargetFramework)'!='net40'">others_frameworks</DefineConstants>
 		<PackageProjectUrl>https://github.com/gachris/iCloud.Apis/tree/master/Api/iCloud.Calendar.Api</PackageProjectUrl>
+		<Authors>gachris</Authors>
 	</PropertyGroup>
 
 	<ItemGroup>
 	  <Reference Include="antlr.runtime">
 	    <HintPath>..\DLLs\Ical.Net.2.3.0\antlr.runtime.dll</HintPath>
+	    <Private>true</Private>
 	  </Reference>
 	  <Reference Include="Ical.Net">
 	    <HintPath>..\DLLs\Ical.Net.2.3.0\Ical.Net.dll</HintPath>
+	    <Private>true</Private>
 	  </Reference>
 	  <Reference Include="Ical.Net.Collections">
 	    <HintPath>..\DLLs\Ical.Net.2.3.0\Ical.Net.Collections.dll</HintPath>
+	    <Private>true</Private>
 	  </Reference>
 	  <Reference Include="NodaTime">
 	    <HintPath>..\DLLs\Ical.Net.2.3.0\NodaTime.dll</HintPath>
+	    <Private>true</Private>
 	  </Reference>
 	</ItemGroup>
 
