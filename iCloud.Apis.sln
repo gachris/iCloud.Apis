@@ -1,0 +1,95 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30711.63
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Api", "Api", "{321037E3-94E5-473E-9FCD-090962DC92EF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "App", "App", "{F84F9D75-1D2E-4054-AA74-211066AE7486}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DLLs", "DLLs", "{91BC726D-A12A-4250-8C6B-8CE7B7116805}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Ical.Net.2.3.0", "Ical.Net.2.3.0", "{6B06E6F0-B483-4A30-92FA-96DF244EDD40}"
+	ProjectSection(SolutionItems) = preProject
+		Api\DLLs\Ical.Net.2.3.0\antlr.runtime.dll = Api\DLLs\Ical.Net.2.3.0\antlr.runtime.dll
+		Api\DLLs\Ical.Net.2.3.0\antlr.runtime.xml = Api\DLLs\Ical.Net.2.3.0\antlr.runtime.xml
+		Api\DLLs\Ical.Net.2.3.0\Ical.Net.Collections.dll = Api\DLLs\Ical.Net.2.3.0\Ical.Net.Collections.dll
+		Api\DLLs\Ical.Net.2.3.0\Ical.Net.dll = Api\DLLs\Ical.Net.2.3.0\Ical.Net.dll
+		Api\DLLs\Ical.Net.2.3.0\Ical.Net.xml = Api\DLLs\Ical.Net.2.3.0\Ical.Net.xml
+		Api\DLLs\Ical.Net.2.3.0\NodaTime.dll = Api\DLLs\Ical.Net.2.3.0\NodaTime.dll
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ICalVCard.1.0.0", "ICalVCard.1.0.0", "{25401415-2070-4CB5-B0B8-3CBB83490144}"
+	ProjectSection(SolutionItems) = preProject
+		Api\DLLs\ICalVCard.1.0.0\ICalVCard.dll = Api\DLLs\ICalVCard.1.0.0\ICalVCard.dll
+		Api\DLLs\ICalVCard.1.0.0\ICalVCard.xml = Api\DLLs\ICalVCard.1.0.0\ICalVCard.xml
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iCloud.Auth.Api", "Api\iCloud.Auth.Api\iCloud.Auth.Api.csproj", "{061D4998-908E-4D74-A784-2FCB768570F2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iCloud.Calendar.Api", "Api\iCloud.Calendar.Api\iCloud.Calendar.Api.csproj", "{4A5AD061-9D16-4874-92A5-28F5206F94DA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iCloud.Core.Api", "Api\iCloud.Core.Api\iCloud.Core.Api.csproj", "{A84A5E64-5D76-4803-9C64-05361CA9D599}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iCloud.People.Api", "Api\iCloud.People.Api\iCloud.People.Api.csproj", "{AFA325B3-FAC5-4DD2-BE32-A688506FF7A8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iCloud.Integration.Implementation", "iCloud.Integration.Implementation\iCloud.Integration.Implementation.csproj", "{13B0C908-4DF8-4201-BE33-FAC153047BFC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iCloud.Sync.App.net40", "iCloud.Sync.App.net40\iCloud.Sync.App.net40.csproj", "{362FFFA1-D437-478B-837A-A1B32DA3370A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iCloud.Sync.App.netcoreapp3.1", "iCloud.Sync.App.netcoreapp3.1\iCloud.Sync.App.netcoreapp3.1.csproj", "{AE9C2B9D-D0B3-4138-93E9-521A2D2C43E2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{061D4998-908E-4D74-A784-2FCB768570F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{061D4998-908E-4D74-A784-2FCB768570F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{061D4998-908E-4D74-A784-2FCB768570F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{061D4998-908E-4D74-A784-2FCB768570F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A5AD061-9D16-4874-92A5-28F5206F94DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A5AD061-9D16-4874-92A5-28F5206F94DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A5AD061-9D16-4874-92A5-28F5206F94DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A5AD061-9D16-4874-92A5-28F5206F94DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A84A5E64-5D76-4803-9C64-05361CA9D599}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A84A5E64-5D76-4803-9C64-05361CA9D599}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A84A5E64-5D76-4803-9C64-05361CA9D599}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A84A5E64-5D76-4803-9C64-05361CA9D599}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFA325B3-FAC5-4DD2-BE32-A688506FF7A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFA325B3-FAC5-4DD2-BE32-A688506FF7A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFA325B3-FAC5-4DD2-BE32-A688506FF7A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFA325B3-FAC5-4DD2-BE32-A688506FF7A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{13B0C908-4DF8-4201-BE33-FAC153047BFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13B0C908-4DF8-4201-BE33-FAC153047BFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13B0C908-4DF8-4201-BE33-FAC153047BFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13B0C908-4DF8-4201-BE33-FAC153047BFC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{362FFFA1-D437-478B-837A-A1B32DA3370A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{362FFFA1-D437-478B-837A-A1B32DA3370A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{362FFFA1-D437-478B-837A-A1B32DA3370A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{362FFFA1-D437-478B-837A-A1B32DA3370A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE9C2B9D-D0B3-4138-93E9-521A2D2C43E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE9C2B9D-D0B3-4138-93E9-521A2D2C43E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE9C2B9D-D0B3-4138-93E9-521A2D2C43E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE9C2B9D-D0B3-4138-93E9-521A2D2C43E2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{91BC726D-A12A-4250-8C6B-8CE7B7116805} = {321037E3-94E5-473E-9FCD-090962DC92EF}
+		{6B06E6F0-B483-4A30-92FA-96DF244EDD40} = {91BC726D-A12A-4250-8C6B-8CE7B7116805}
+		{25401415-2070-4CB5-B0B8-3CBB83490144} = {91BC726D-A12A-4250-8C6B-8CE7B7116805}
+		{061D4998-908E-4D74-A784-2FCB768570F2} = {321037E3-94E5-473E-9FCD-090962DC92EF}
+		{4A5AD061-9D16-4874-92A5-28F5206F94DA} = {321037E3-94E5-473E-9FCD-090962DC92EF}
+		{A84A5E64-5D76-4803-9C64-05361CA9D599} = {321037E3-94E5-473E-9FCD-090962DC92EF}
+		{AFA325B3-FAC5-4DD2-BE32-A688506FF7A8} = {321037E3-94E5-473E-9FCD-090962DC92EF}
+		{13B0C908-4DF8-4201-BE33-FAC153047BFC} = {F84F9D75-1D2E-4054-AA74-211066AE7486}
+		{362FFFA1-D437-478B-837A-A1B32DA3370A} = {F84F9D75-1D2E-4054-AA74-211066AE7486}
+		{AE9C2B9D-D0B3-4138-93E9-521A2D2C43E2} = {F84F9D75-1D2E-4054-AA74-211066AE7486}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F1A95244-02F6-4521-A76A-67E543384CFA}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFrameworks>netcoreapp3.1</TargetFrameworks>
+		<OutputType>Exe</OutputType>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="iCloud.Calendar.Api" Version="1.0.0" />
+		<PackageReference Include="iCloud.People.Api" Version="1.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\iCloud.Integration.Implementation\iCloud.Integration.Implementation.csproj" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)'=='net40'">
+		<PackageReference Include="Microsoft.Bcl" Version="1.1.10" />
+		<PackageReference Include="Microsoft.Bcl.Async" Version="1.0.168" />
+		<PackageReference Include="Microsoft.Bcl.Build" Version="1.0.14" />
+		<PackageReference Include="Microsoft.Net.Http" Version="2.2.29" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Reference Include="Ical.Net">
+			<HintPath>..\Api\DLLs\Ical.Net.2.3.0\Ical.Net.dll</HintPath>
+		</Reference>
+		<Reference Include="Ical.Net.Collections">
+			<HintPath>..\Api\DLLs\Ical.Net.2.3.0\Ical.Net.Collections.dll</HintPath>
+		</Reference>
+	</ItemGroup>
+
+</Project>

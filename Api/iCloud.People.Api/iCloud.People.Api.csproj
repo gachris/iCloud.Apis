@@ -1,0 +1,54 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFrameworks>net40;netcoreapp3.1</TargetFrameworks>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<SignAssembly>true</SignAssembly>
+		<AssemblyOriginatorKeyFile>iCloud.People.Api_SignAssembly_Key.snk</AssemblyOriginatorKeyFile>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Folder Include="Properties\" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)'=='net40'">
+		<PackageReference Include="Microsoft.Bcl" Version="1.1.10" />
+		<PackageReference Include="Microsoft.Bcl.Async" Version="1.0.168" />
+		<PackageReference Include="Microsoft.Bcl.Build" Version="1.0.14" />
+		<PackageReference Include="Microsoft.Net.Http" Version="2.2.29" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="iCloud.Auth.Api" Version="1.0.0" />
+	</ItemGroup>
+
+	<PropertyGroup>
+		<DefineConstants Condition="'$(TargetFramework)'=='net40'">net40</DefineConstants>
+		<DefineConstants Condition="'$(TargetFramework)'!='net40'">others_frameworks</DefineConstants>
+		<RepositoryUrl>https://github.com/gachris/iCloud.Apis/tree/master/Api/iCloud.People.Api</RepositoryUrl>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <Reference Include="antlr.runtime">
+	    <HintPath>..\DLLs\Ical.Net.2.3.0\antlr.runtime.dll</HintPath>
+	  </Reference>
+	  <Reference Include="Ical.Net">
+	    <HintPath>..\DLLs\Ical.Net.2.3.0\Ical.Net.dll</HintPath>
+	  </Reference>
+	  <Reference Include="Ical.Net.Collections">
+	    <HintPath>..\DLLs\Ical.Net.2.3.0\Ical.Net.Collections.dll</HintPath>
+	  </Reference>
+	  <Reference Include="ICalVCard">
+	    <HintPath>..\DLLs\ICalVCard.1.0.0\ICalVCard.dll</HintPath>
+	  </Reference>
+	  <Reference Include="NodaTime">
+	    <HintPath>..\DLLs\Ical.Net.2.3.0\NodaTime.dll</HintPath>
+	  </Reference>
+	</ItemGroup>
+
+	<Target Name="CopyPackage" AfterTargets="Pack" Condition=" '$(Configuration)' == 'Release'">
+		<Exec Command="xcopy /Y &quot;$(ProjectDir)bin\Release\*.*&quot; &quot;C:\Program Files (x86)\Microsoft SDKs\NuGetPackages\&quot;" />
+	</Target>
+
+</Project>
