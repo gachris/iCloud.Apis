@@ -77,14 +77,7 @@ namespace iCloud.Apis.Core.Services
             TimeSpan ts = this.BackOff.GetNextBackOff(currentFailedTry);
             if (ts > this.MaxTimeSpan || ts < TimeSpan.Zero)
                 return false;
-
-#if net40
-            await AwaitExtensions.ConfigureAwait(this.Wait(ts, cancellationToken), false);
-#endif
-#if others_frameworks
-            await this.Wait(ts, cancellationToken);
-#endif
-
+            await this.Wait(ts, cancellationToken).ConfigureAwait(false);
             BackOffHandler.Logger.Debug("Back-Off handled the error. Waited {0}ms before next retry...", (object)ts.TotalMilliseconds);
             return true;
         }
@@ -96,7 +89,7 @@ namespace iCloud.Apis.Core.Services
         protected virtual async Task Wait(TimeSpan ts, CancellationToken cancellationToken)
         {
 #if net40
-            await AwaitExtensions.ConfigureAwait(TaskEx.Delay(ts, cancellationToken), false);
+            await TaskEx.Delay(ts, cancellationToken).ConfigureAwait(false);
 #endif
 #if others_frameworks
             await Task.Delay(ts, cancellationToken);

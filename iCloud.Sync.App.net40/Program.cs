@@ -13,7 +13,12 @@ namespace iCloud.Sync.App.net40
 
         private static void Main(string[] args)
         {
-            _icloudAuthorizationService.SignInAsync();
+            SignIn();
+        }
+
+        private static void SignIn()
+        {
+            _icloudAuthorizationService.SignIn();
         }
 
         private static void GetCalendar()

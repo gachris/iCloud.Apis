@@ -5,7 +5,7 @@ using iCloud.Integration.Implementation;
 using System;
 using System.Net;
 
-namespace iCloud.Sync.App.netcoreapp3_1
+namespace iCloud.Sync.App.net40
 {
     internal class Program
     {
@@ -13,7 +13,49 @@ namespace iCloud.Sync.App.netcoreapp3_1
 
         private static void Main(string[] args)
         {
-            _icloudAuthorizationService.SignInAsync();
+        }
+
+        private static void SignIn()
+        {
+            _icloudAuthorizationService.SignIn();
+        }
+
+        private static void SignOut()
+        {
+            _icloudAuthorizationService.SignOut();
+        }
+
+        private static void GetContacts()
+        {
+            var getContactsResponse = ICloudContactsSercive.GetContacts(_icloudAuthorizationService.Credential);
+        }
+
+        private static void GetContact()
+        {
+            var getContactResponse = ICloudContactsSercive.GetContact(_icloudAuthorizationService.Credential, "Contact Unique ID");
+        }
+
+        private static void AddContact()
+        {
+            var person = new Apis.People.Person();
+
+            person.FormattedName = "Contact Description";
+            person.FamilyName = "Contact Description";
+
+            var addContactResponse = ICloudContactsSercive.AddContact(_icloudAuthorizationService.Credential, person);
+        }
+
+        private static void UpdateContact(Apis.People.Person person)
+        {
+            person.FormattedName = "New Contact Description";
+            person.FamilyName = "New Contact Description";
+
+            var updateContactsResponse = ICloudContactsSercive.UpdateContact(_icloudAuthorizationService.Credential, person, person.UniqueId, person.Etag);
+        }
+
+        private static void DeleteContact()
+        {
+            var getContactResponse = ICloudContactsSercive.DeleteContact(_icloudAuthorizationService.Credential, "Contact Unique");
         }
 
         private static void GetCalendar()

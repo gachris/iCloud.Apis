@@ -6,11 +6,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="iCloud.Calendar.Api" Version="1.0.0" />
-		<PackageReference Include="iCloud.People.Api" Version="1.0.0" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<ProjectReference Include="..\iCloud.Integration.Implementation\iCloud.Integration.Implementation.csproj" />
 	</ItemGroup>
 
@@ -27,6 +22,9 @@
 		</Reference>
 		<Reference Include="Ical.Net.Collections">
 			<HintPath>..\Api\DLLs\Ical.Net.2.3.0\Ical.Net.Collections.dll</HintPath>
+		</Reference>
+		<Reference Include="ICalVCard">
+		  <HintPath>..\Api\DLLs\ICalVCard.1.0.0\ICalVCard.dll</HintPath>
 		</Reference>
 	</ItemGroup>
 

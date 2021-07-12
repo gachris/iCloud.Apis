@@ -15,10 +15,6 @@
 		<PackageReference Include="Microsoft.Net.Http" Version="2.2.29" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<PackageReference Include="iCloud.Auth.Api" Version="1.0.0" />
-	</ItemGroup>
-
 	<PropertyGroup>
 		<DefineConstants Condition="'$(TargetFramework)'=='net40'">net40</DefineConstants>
 		<DefineConstants Condition="'$(TargetFramework)'!='net40'">others_frameworks</DefineConstants>
@@ -47,6 +43,10 @@
 
 	<ItemGroup>
 	  <Folder Include="Properties\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\iCloud.Auth.Api\iCloud.Auth.Api.csproj" />
 	</ItemGroup>
 
 	<Target Name="CopyPackage" AfterTargets="Pack" Condition=" '$(Configuration)' == 'Release'">

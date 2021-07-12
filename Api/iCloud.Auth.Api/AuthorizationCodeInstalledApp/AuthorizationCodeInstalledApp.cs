@@ -42,12 +42,7 @@ namespace iCloud.Apis.Auth
 
         public async Task<UserCredential> AuthorizeAsync(string userId, NetworkCredential networdCredentials, CancellationToken taskCancellationToken)
         {
-#if net40
-            TokenResponse token = await AwaitExtensions.ConfigureAwait<TokenResponse>(this.Flow.LoadTokenAsync(userId, taskCancellationToken), false);
-#endif
-#if others_frameworks
-            TokenResponse token = await this.Flow.LoadTokenAsync(userId, taskCancellationToken);
-#endif
+            TokenResponse token = await this.Flow.LoadTokenAsync(userId, taskCancellationToken).ConfigureAwait(false);
             if (this.ShouldRequestAuthorizationCode(token))
             {
                 AuthorizationCodeResponseUrl authorizationCode = await this.CodeReceiver.ReceiveCodeAsync(this.Flow.CreateAuthorizationCodeRequest(this.CodeReceiver.RedirectUri, networdCredentials), taskCancellationToken).ConfigureAwait(false);

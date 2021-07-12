@@ -38,18 +38,6 @@
       <HintPath>..\Api\DLLs\Ical.Net.2.3.0\Ical.Net.dll</HintPath>
     </Reference>
     <Reference Include="Ical.Net.Collections, Version=2.1.0.30341, Culture=neutral, PublicKeyToken=33517596b1f7d484" />
-    <Reference Include="iCloud.Auth.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=778e3f9e072be1f8, processorArchitecture=MSIL">
-      <HintPath>..\packages\iCloud.Auth.Api.1.0.0\lib\net40\iCloud.Auth.Api.dll</HintPath>
-    </Reference>
-    <Reference Include="iCloud.Calendar.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=1658affd531a48d0, processorArchitecture=MSIL">
-      <HintPath>..\packages\iCloud.Calendar.Api.1.0.0\lib\net40\iCloud.Calendar.Api.dll</HintPath>
-    </Reference>
-    <Reference Include="iCloud.Core.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=b61575b2f6f24c72, processorArchitecture=MSIL">
-      <HintPath>..\packages\iCloud.Core.Api.1.0.0\lib\net40\iCloud.Core.Api.dll</HintPath>
-    </Reference>
-    <Reference Include="iCloud.People.Api, Version=1.0.0.0, Culture=neutral, PublicKeyToken=e85bb97d6e99604e, processorArchitecture=MSIL">
-      <HintPath>..\packages\iCloud.People.Api.1.0.0\lib\net40\iCloud.People.Api.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Threading.Tasks, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.dll</HintPath>
     </Reference>
@@ -101,6 +89,18 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Api\iCloud.Auth.Api\iCloud.Auth.Api.csproj">
+      <Project>{061d4998-908e-4d74-a784-2fcb768570f2}</Project>
+      <Name>iCloud.Auth.Api</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Api\iCloud.Calendar.Api\iCloud.Calendar.Api.csproj">
+      <Project>{4a5ad061-9d16-4874-92a5-28f5206f94da}</Project>
+      <Name>iCloud.Calendar.Api</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Api\iCloud.People.Api\iCloud.People.Api.csproj">
+      <Project>{afa325b3-fac5-4dd2-be32-a688506ff7a8}</Project>
+      <Name>iCloud.People.Api</Name>
+    </ProjectReference>
     <ProjectReference Include="..\iCloud.Integration.Implementation\iCloud.Integration.Implementation.csproj">
       <Project>{13B0C908-4DF8-4201-BE33-FAC153047BFC}</Project>
       <Name>iCloud.Integration.Implementation</Name>

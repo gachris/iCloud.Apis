@@ -3,6 +3,7 @@ using iCloud.Apis.Core.Services;
 using System;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -86,6 +87,7 @@ namespace iCloud.Apis.Auth
         {
             httpClient.MessageHandler.AddExecuteInterceptor(this);
             httpClient.MessageHandler.AddUnsuccessfulResponseHandler(this);
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", Token.AccessToken);
         }
 
         public virtual string GetAccessTokenForRequestAsync(string authUri = null, CancellationToken cancellationToken = default)
@@ -108,14 +110,7 @@ namespace iCloud.Apis.Auth
                 UserCredential.Logger.Warning("Token is already null, no need to revoke it.");
                 return false;
             }
-
-#if net40
-            await AwaitExtensions.ConfigureAwait(this.flow.RevokeTokenAsync(this.userId, this.Token.AccessToken, taskCancellationToken), false);
-#endif
-#if others_frameworks
-            await this.flow.RevokeTokenAsync(this.userId, this.Token.AccessToken, taskCancellationToken);
-#endif
-
+            await this.flow.RevokeTokenAsync(this.userId, this.Token.AccessToken, taskCancellationToken).ConfigureAwait(false);
             UserCredential.Logger.Info("Access token was revoked successfully");
             return true;
         }

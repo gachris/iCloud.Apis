@@ -10,44 +10,14 @@ namespace iCloud.Integration.Implementation
 {
     public class ICloudAuthorizationService
     {
-
-        #region Events
-
         public event EventHandler OnSignIn;
         public event EventHandler OnSignOut;
-
-        #endregion
-
-        #region Constructor
 
         public ICloudAuthorizationService(string userId, NetworkCredential networkCredential)
         {
             UserId = userId;
             NetworkCredential = networkCredential;
-            Init();
         }
-        
-        #endregion
-
-        #region Init
-
-        private async void Init()
-        {
-            try
-            {
-                var token = GetTokenResponse().Result;
-                if (token != null)
-                    SignInAsync();
-            }
-            catch
-            {
-                await TokenDataStore.DeleteAsync<TokenResponse>("gachris");
-            }
-        }
-
-        #endregion
-
-        #region Data     
 
         public UserCredential Credential { get; private set; }
 
@@ -71,26 +41,21 @@ namespace iCloud.Integration.Implementation
 
         public NetworkCredential NetworkCredential { get; }
 
-        #endregion
-
-        #region Functions
-
-        public void SignInAsync()
+        public bool SignIn()
         {
-            Credential = AuthorizationBroker.AuthorizeAsync(UserId, NetworkCredential, CancellationToken.None, TokenDataStore).Result;
-            if (Credential != null)
-            {
-                OnSignIn?.Invoke(Credential, new EventArgs());
-            }
+            Credential = AuthorizationBroker.AuthorizeAsync(UserId, NetworkCredential, CancellationToken.None, TokenDataStore).ConfigureAwait(false).GetAwaiter().GetResult();
+            OnSignIn?.Invoke(this, new EventArgs());
+            return IsAuthenticated;
         }
 
-        public async Task SignOutAsync()
+        public bool SignOut()
         {
             if (Credential != null)
             {
-                await Credential.RevokeTokenAsync(CancellationToken.None);
-                OnSignOut?.Invoke(Credential, new EventArgs());
+                var result = Credential.RevokeTokenAsync(CancellationToken.None).ConfigureAwait(false).GetAwaiter().GetResult();
+                OnSignOut?.Invoke(this, new EventArgs());
                 Credential = null;
+                return result;
             }
             else throw new UnauthorizedAccessException();
         }
@@ -99,7 +64,5 @@ namespace iCloud.Integration.Implementation
         {
             return await TokenDataStore.GetAsync<TokenResponse>(UserId);
         }
-
-        #endregion
     }
 }

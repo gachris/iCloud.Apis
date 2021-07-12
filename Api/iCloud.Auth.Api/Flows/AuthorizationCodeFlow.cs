@@ -78,12 +78,7 @@ namespace iCloud.Apis.Auth.Flows
             taskCancellationToken.ThrowIfCancellationRequested();
             if (this.DataStore == null)
                 return null;
-#if net40
-            return await AwaitExtensions.ConfigureAwait(this.DataStore.GetAsync<TokenResponse>(userId), false);
-#endif
-#if others_frameworks
-            return await this.DataStore.GetAsync<TokenResponse>(userId);
-#endif
+            return await this.DataStore.GetAsync<TokenResponse>(userId).ConfigureAwait(false);
         }
 
         public async Task DeleteTokenAsync(string userId, CancellationToken taskCancellationToken)
@@ -91,12 +86,7 @@ namespace iCloud.Apis.Auth.Flows
             taskCancellationToken.ThrowIfCancellationRequested();
             if (this.DataStore == null)
                 return;
-#if net40
-            await AwaitExtensions.ConfigureAwait(this.DataStore.DeleteAsync<TokenResponse>(userId), false);
-#endif
-#if others_frameworks
-            await this.DataStore.DeleteAsync<TokenResponse>(userId);
-#endif
+            await this.DataStore.DeleteAsync<TokenResponse>(userId).ConfigureAwait(false);
         }
 
         public virtual AuthorizationCodeRequestUrl CreateAuthorizationCodeRequest(string redirectUri, NetworkCredential networkCredential)
@@ -112,14 +102,8 @@ namespace iCloud.Apis.Auth.Flows
                 RedirectUri = redirectUri,
                 Code = code
             };
-#if net40
             TokenResponse token = await this.FetchTokenAsync(userId, codeTokenRequest, taskCancellationToken).ConfigureAwait(false);
-            await AwaitExtensions.ConfigureAwait(this.StoreTokenAsync(userId, token, taskCancellationToken), false);
-#endif
-#if others_frameworks
-            TokenResponse token = await this.FetchTokenAsync(userId, codeTokenRequest, taskCancellationToken);
-            await this.StoreTokenAsync(userId, token, taskCancellationToken);
-#endif
+            await this.StoreTokenAsync(userId, token, taskCancellationToken).ConfigureAwait(false);
             return token;
         }
 
@@ -147,12 +131,7 @@ namespace iCloud.Apis.Auth.Flows
             taskCancellationToken.ThrowIfCancellationRequested();
             if (this.DataStore == null)
                 return;
-#if net40
-            await AwaitExtensions.ConfigureAwait(this.DataStore.StoreAsync<TokenResponse>(userId, token), false);
-#endif
-#if others_frameworks
-            await this.DataStore.StoreAsync<TokenResponse>(userId, token);
-#endif
+            await this.DataStore.StoreAsync<TokenResponse>(userId, token).ConfigureAwait(false);
         }
 
         /// <summary>Retrieve a new token from the server using the specified request.</summary>
@@ -162,26 +141,17 @@ namespace iCloud.Apis.Auth.Flows
         /// <returns>Token response with the new access token.</returns>
         public async Task<TokenResponse> FetchTokenAsync(string userId, AuthorizationCodeTokenRequest request, CancellationToken taskCancellationToken)
         {
-            TokenResponse tokenResponse;
             TokenResponseException tokenException;
             try
             {
-                tokenResponse = await request.ExecuteAsync(httpClient, this.CalendarServerUrl, this.ContactsServerUrl, taskCancellationToken, this.Clock).ConfigureAwait(false);
-                goto label_5;
+                return await request.ExecuteAsync(httpClient, this.CalendarServerUrl, this.ContactsServerUrl, taskCancellationToken, this.Clock).ConfigureAwait(false);
             }
             catch (TokenResponseException ex)
             {
                 tokenException = ex;
             }
-#if net40
-            await AwaitExtensions.ConfigureAwait(this.DeleteTokenAsync(userId, taskCancellationToken), false);
-#endif
-#if others_frameworks
-            await this.DeleteTokenAsync(userId, taskCancellationToken);
-#endif
+            await this.DeleteTokenAsync(userId, taskCancellationToken).ConfigureAwait(false);
             throw tokenException;
-        label_5:
-            return tokenResponse;
         }
 
         public void Dispose()

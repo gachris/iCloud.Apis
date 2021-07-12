@@ -112,12 +112,7 @@ namespace iCloud.Apis.Core.Services
         {
             HttpResponseMessage httpResponseMessage = await this.ExecuteUnparsedAsync(cancellationToken).ConfigureAwait(false);
             cancellationToken.ThrowIfCancellationRequested();
-#if net40
-            return await httpResponseMessage.Content.ReadAsStreamAsync().ConfigureAwait<Stream>(false);
-#endif
-#if others_frameworks
-            return await httpResponseMessage.Content.ReadAsStreamAsync();
-#endif
+            return await httpResponseMessage.Content.ReadAsStreamAsync().ConfigureAwait(false);
         }
 
         /// <summary>Sync executes the request without parsing the result. </summary>

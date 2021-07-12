@@ -1,41 +1,59 @@
 ﻿using iCloud.Apis.Auth;
 using iCloud.Apis.People;
 using System;
-using System.Collections.Generic;
 
 namespace iCloud.Integration.Implementation
 {
     public class ICloudContactsSercive
     {
-        #region Retrieve Contacts
-
-        public static IList<Person> GetContacts(UserCredential credential)
+        public static PersonList GetContacts(UserCredential credential, string nextPageToken = null)
         {
             var service = GetService(credential);
-            return service.GetContacts(credential, "card");
+            PeopleResource.ListRequest request = service.People.List("card");
+            request.MaxResults = 1000;
+            request.PageToken = nextPageToken;
+            return request.Execute();
         }
 
-        #endregion
-
-        public static Person AddContact(UserCredential credential, Person contact)
+        public static Person GetContact(UserCredential credential, string personId)
         {
             var service = GetService(credential);
-            return service.AddContact(credential, contact, "card");
+            PeopleResource.GetRequest request = service.People.Get(personId, "card");
+            return request.Execute();
         }
 
-        public static Person UpdateContact(UserCredential credential, Person contact, string uniqueId, string etag)
+        public static Person AddContact(UserCredential credential, Person person)
         {
             var service = GetService(credential);
-            return service.UpdateContact(credential, contact, uniqueId, etag, "card");
+            PeopleResource.InsertRequest request = service.People.Insert(person, "card");
+            return request.Execute();
+        }
+
+        public static Person UpdateContact(UserCredential credential, Person person, string personId, string etag)
+        {
+            var service = GetService(credential);
+            PeopleResource.UpdateRequest request = service.People.Update(person, personId, etag, "card");
+            return request.Execute();
+        }
+
+        public static string DeleteContact(UserCredential credential, string personId)
+        {
+            var service = GetService(credential);
+            PeopleResource.DeleteRequest request = service.People.Delete(personId, "card");
+            return request.Execute();
         }
 
         #region Services
 
-        private static ContactsService GetService(UserCredential credential)
+        private static PeopleService GetService(UserCredential credential)
         {
             if (credential != null)
             {
-                return new ContactsService();
+                return new PeopleService(new iCloud.Apis.Core.Services.BaseClientService.Initializer()
+                {
+                    ApplicationName = "iCloud.SyncApp",
+                    HttpClientInitializer = credential
+                });
             }
             else throw new UnauthorizedAccessException();
         }

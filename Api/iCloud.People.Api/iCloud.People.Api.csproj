@@ -19,16 +19,17 @@
 		<PackageReference Include="Microsoft.Net.Http" Version="2.2.29" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<PackageReference Include="iCloud.Auth.Api" Version="1.0.0" />
-	</ItemGroup>
-
 	<PropertyGroup>
 		<DefineConstants Condition="'$(TargetFramework)'=='net40'">net40</DefineConstants>
 		<DefineConstants Condition="'$(TargetFramework)'!='net40'">others_frameworks</DefineConstants>
 		<RepositoryUrl>https://github.com/gachris/iCloud.Apis/tree/master/Api/iCloud.People.Api</RepositoryUrl>
 		<Authors>gachris</Authors>
 	</PropertyGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\iCloud.Auth.Api\iCloud.Auth.Api.csproj" />
+	  <ProjectReference Include="..\iCloud.Core.Api\iCloud.Core.Api.csproj" />
+	</ItemGroup>
 
 	<ItemGroup>
 	  <Reference Include="antlr.runtime">

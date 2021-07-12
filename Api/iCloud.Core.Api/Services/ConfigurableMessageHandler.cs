@@ -217,12 +217,7 @@ namespace iCloud.Apis.Core.Services
                     list1 = this.executeInterceptors.ToList();
                 foreach (IHttpExecuteInterceptor executeInterceptor in list1)
                 {
-#if net40
-                    await AwaitExtensions.ConfigureAwait(executeInterceptor.InterceptAsync(request, cancellationToken), false);
-#endif
-#if others_frameworks
-                    await executeInterceptor.InterceptAsync(request, cancellationToken);
-#endif                    
+                    await executeInterceptor.InterceptAsync(request, cancellationToken).ConfigureAwait(false);
                 }
                 try
                 {
@@ -244,18 +239,6 @@ namespace iCloud.Apis.Core.Services
                     foreach (IHttpExceptionHandler exceptionHandler in list2)
                     {
                         flag = flag1;
-
-#if net40
-                        int num = await AwaitExtensions.ConfigureAwait<bool>(exceptionHandler.HandleExceptionAsync(new HandleExceptionArgs()
-                        {
-                            Request = request,
-                            Exception = lastException,
-                            TotalTries = this.NumTries,
-                            CurrentFailedTry = this.NumTries - triesRemaining,
-                            CancellationToken = cancellationToken
-                        }), false) ? 1 : 0;
-#endif
-#if others_frameworks
                         int num = await exceptionHandler.HandleExceptionAsync(new HandleExceptionArgs()
                         {
                             Request = request,
@@ -263,9 +246,7 @@ namespace iCloud.Apis.Core.Services
                             TotalTries = this.NumTries,
                             CurrentFailedTry = this.NumTries - triesRemaining,
                             CancellationToken = cancellationToken
-                        }) ? 1 : 0;
-#endif
-
+                        }).ConfigureAwait(false) ? 1 : 0;
                         flag1 = flag | num != 0;
                     }
                     if (!flag1)
@@ -289,17 +270,6 @@ namespace iCloud.Apis.Core.Services
                     foreach (IHttpUnsuccessfulResponseHandler unsuccessfulResponseHandler in list2)
                     {
                         flag = flag1;
-#if net40
-                        int num = await AwaitExtensions.ConfigureAwait<bool>(unsuccessfulResponseHandler.HandleResponseAsync(new HandleUnsuccessfulResponseArgs()
-                        {
-                            Request = request,
-                            Response = response,
-                            TotalTries = this.NumTries,
-                            CurrentFailedTry = this.NumTries - triesRemaining,
-                            CancellationToken = cancellationToken
-                        }), false) ? 1 : 0;
-#endif
-#if others_frameworks
                         int num = await unsuccessfulResponseHandler.HandleResponseAsync(new HandleUnsuccessfulResponseArgs()
                         {
                             Request = request,
@@ -307,9 +277,7 @@ namespace iCloud.Apis.Core.Services
                             TotalTries = this.NumTries,
                             CurrentFailedTry = this.NumTries - triesRemaining,
                             CancellationToken = cancellationToken
-                        }) ? 1 : 0;
-#endif
-                        
+                        }).ConfigureAwait(false) ? 1 : 0;
                         flag1 = flag | num != 0;
                     }
                     if (!flag1)

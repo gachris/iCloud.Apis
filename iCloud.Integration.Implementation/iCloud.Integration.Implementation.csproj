@@ -12,8 +12,8 @@
 	</ItemGroup>
 	
 	<ItemGroup>
-	  <PackageReference Include="iCloud.Calendar.Api" Version="1.0.0" />
-	  <PackageReference Include="iCloud.People.Api" Version="1.0.0" />
+	  <ProjectReference Include="..\Api\iCloud.Calendar.Api\iCloud.Calendar.Api.csproj" />
+	  <ProjectReference Include="..\Api\iCloud.People.Api\iCloud.People.Api.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

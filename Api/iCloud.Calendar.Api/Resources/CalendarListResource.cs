@@ -56,16 +56,6 @@ namespace iCloud.Apis.Calendar
             return new ListRequest(service);
         }
 
-        /// <summary>Updates an existing calendar on the user's calendar list. This method supports patch
-        /// semantics.</summary>
-        /// <param name="body">The body of the request.</param>
-        /// <param name="calendarId">Calendar identifier. To retrieve calendar IDs call the calendarList.list method. If you
-        /// want to access the primary calendar of the currently logged in user, use the "primary" keyword.</param>
-        public virtual PatchRequest Patch(CalendarListEntry body, string calendarId)
-        {
-            return new PatchRequest(service, body, calendarId);
-        }
-
         /// <summary>Updates an existing calendar on the user's calendar list.</summary>
         /// <param name="body">The body of the request.</param>
         /// <param name="calendarId">Calendar identifier. To retrieve calendar IDs call the calendarList.list method. If you
@@ -73,13 +63,6 @@ namespace iCloud.Apis.Calendar
         public virtual UpdateRequest Update(CalendarListEntry body, string calendarId)
         {
             return new UpdateRequest(service, body, calendarId);
-        }
-
-        /// <summary>Watch for changes to CalendarList resources.</summary>
-        /// <param name="body">The body of the request.</param>
-        public virtual WatchRequest Watch(object body)
-        {
-            return new WatchRequest(service, body);
         }
 
         /// <summary>Removes a calendar from the user's calendar list.</summary>
@@ -108,7 +91,6 @@ namespace iCloud.Apis.Calendar
 
             public override IDictionary<string, string> Headers => new Dictionary<string, string>
             {
-                { "Authorization", $"Basic {((UserCredential)Service.HttpClientInitializer).Token.AccessToken}"},
                 { "Depth", "1" }
             };
 
@@ -170,7 +152,6 @@ namespace iCloud.Apis.Calendar
 
             public override IDictionary<string, string> Headers => new Dictionary<string, string>
             {
-                { "Authorization", $"Basic {((UserCredential)Service.HttpClientInitializer).Token.AccessToken}"},
                 { "Depth", "1" }
             };
 
@@ -235,12 +216,6 @@ namespace iCloud.Apis.Calendar
 
             [RequestParameter("calendarId", RequestParameterType.Path)]
             public virtual string CalendarId { get; private set; }
-
-            /// <summary>Whether to use the foregroundColor and backgroundColor fields to write the calendar colors
-            /// (RGB). If this feature is used, the index-based colorId field will be set to the best matching option
-            /// automatically. Optional. The default is False.</summary>
-            //[RequestParameter("colorRgbFormat", RequestParameterType.Query)]
-            //public virtual bool? ColorRgbFormat { get; set; }
 
             /// <summary>Gets or sets the body of this request.</summary>
             private CalendarListEntry Body { get; set; }
@@ -308,7 +283,6 @@ namespace iCloud.Apis.Calendar
 
             public override IDictionary<string, string> Headers => new Dictionary<string, string>
             {
-                { "Authorization", $"Basic {((UserCredential)Service.HttpClientInitializer).Token.AccessToken}"},
                 { "Depth", "1" }
             };
 
@@ -316,17 +290,6 @@ namespace iCloud.Apis.Calendar
             protected override void InitParameters()
             {
                 base.InitParameters();
-
-                //RequestParameters.Add(
-                //    "colorRgbFormat", new Parameter
-                //    {
-                //        Name = "colorRgbFormat",
-                //        IsRequired = false,
-                //        ParameterType = "query",
-                //        DefaultValue = null,
-                //        Pattern = null,
-                //    });
-
                 RequestParameters.Add("calendarId", new Parameter
                 {
                     Name = "calendarId",
@@ -436,7 +399,6 @@ namespace iCloud.Apis.Calendar
 
             public override IDictionary<string, string> Headers => new Dictionary<string, string>
             {
-                { "Authorization", $"Basic {((UserCredential)Service.HttpClientInitializer).Token.AccessToken}"},
                 { "Depth", "1" }
             };
 
@@ -492,73 +454,6 @@ namespace iCloud.Apis.Calendar
             }
         }
 
-        /// <summary>Updates an existing calendar on the user's calendar list. This method supports patch
-        /// semantics.</summary>
-        public class PatchRequest : CalendarBaseServiceRequest<CalendarListEntry>
-        {
-            /// <summary>Constructs a new Patch request.</summary>
-            public PatchRequest(IClientService service, CalendarListEntry body, string calendarId) : base(service)
-            {
-                CalendarId = calendarId;
-                Body = body;
-                InitParameters();
-            }
-
-
-            /// <summary>Calendar identifier. To retrieve calendar IDs call the calendarList.list method. If you want to
-            /// access the primary calendar of the currently logged in user, use the "primary" keyword.</summary>
-            [RequestParameter("calendarId", RequestParameterType.Path)]
-            public virtual string CalendarId { get; private set; }
-
-            /// <summary>Whether to use the foregroundColor and backgroundColor fields to write the calendar colors
-            /// (RGB). If this feature is used, the index-based colorId field will be set to the best matching option
-            /// automatically. Optional. The default is False.</summary>
-            [RequestParameter("colorRgbFormat", RequestParameterType.Query)]
-            public virtual bool? ColorRgbFormat { get; set; }
-
-
-            /// <summary>Gets or sets the body of this request.</summary>
-            private CalendarListEntry Body { get; set; }
-
-            ///<summary>Returns the body of the request.</summary>
-            protected override object GetBody() => Body;
-
-            ///<summary>Gets the method name.</summary>
-            public override string MethodName => "patch";
-
-            ///<summary>Gets the HTTP method.</summary>
-            public override string HttpMethod => "PATCH";
-
-            ///<summary>Gets the REST path.</summary>
-            public override string RestPath => "users/me/calendarList/{calendarId}";
-
-            /// <summary>Initializes Patch parameter list.</summary>
-            protected override void InitParameters()
-            {
-                base.InitParameters();
-
-                RequestParameters.Add(
-                    "calendarId", new Parameter
-                    {
-                        Name = "calendarId",
-                        IsRequired = true,
-                        ParameterType = "path",
-                        DefaultValue = null,
-                        Pattern = null,
-                    });
-                RequestParameters.Add(
-                    "colorRgbFormat", new Parameter
-                    {
-                        Name = "colorRgbFormat",
-                        IsRequired = false,
-                        ParameterType = "query",
-                        DefaultValue = null,
-                        Pattern = null,
-                    });
-            }
-
-        }
-
         /// <summary>Updates an existing calendar on the user's calendar list.</summary>
         public class UpdateRequest : CalendarBaseServiceRequest<CalendarListEntry>
         {
@@ -575,13 +470,6 @@ namespace iCloud.Apis.Calendar
             [RequestParameter("calendarId", RequestParameterType.Path)]
             public virtual string CalendarId { get; private set; }
 
-            /// <summary>Whether to use the foregroundColor and backgroundColor fields to write the calendar colors
-            /// (RGB). If this feature is used, the index-based colorId field will be set to the best matching option
-            /// automatically. Optional. The default is False.</summary>
-            [RequestParameter("colorRgbFormat", RequestParameterType.Query)]
-            public virtual System.Nullable<bool> ColorRgbFormat { get; set; }
-
-
             /// <summary>Gets or sets the body of this request.</summary>
             private CalendarListEntry Body { get; set; }
 
@@ -595,7 +483,7 @@ namespace iCloud.Apis.Calendar
             public override string HttpMethod => "PUT";
 
             ///<summary>Gets the REST path.</summary>
-            public override string RestPath => "users/me/calendarList/{calendarId}";
+            public override string RestPath => "{calendarId}";
 
             /// <summary>Initializes Update parameter list.</summary>
             protected override void InitParameters()
@@ -608,160 +496,6 @@ namespace iCloud.Apis.Calendar
                         Name = "calendarId",
                         IsRequired = true,
                         ParameterType = "path",
-                        DefaultValue = null,
-                        Pattern = null,
-                    });
-                RequestParameters.Add(
-                    "colorRgbFormat", new Parameter
-                    {
-                        Name = "colorRgbFormat",
-                        IsRequired = false,
-                        ParameterType = "query",
-                        DefaultValue = null,
-                        Pattern = null,
-                    });
-            }
-
-        }
-
-        /// <summary>Watch for changes to CalendarList resources.</summary>
-        public class WatchRequest : CalendarBaseServiceRequest<object>
-        {
-            /// <summary>Constructs a new Watch request.</summary>
-            public WatchRequest(IClientService service, object body)
-                : base(service)
-            {
-                Body = body;
-                InitParameters();
-            }
-
-
-            /// <summary>Maximum number of entries returned on one result page. By default the value is 100 entries. The
-            /// page size can never be larger than 250 entries. Optional.</summary>
-            /// [minimum: 1]
-            [RequestParameter("maxResults", RequestParameterType.Query)]
-            public virtual System.Nullable<int> MaxResults { get; set; }
-
-            /// <summary>The minimum access role for the user in the returned entries. Optional. The default is no
-            /// restriction.</summary>
-            [RequestParameter("minAccessRole", RequestParameterType.Query)]
-            public virtual System.Nullable<MinAccessRoleEnum> MinAccessRole { get; set; }
-
-            /// <summary>The minimum access role for the user in the returned entries. Optional. The default is no
-            /// restriction.</summary>
-            public enum MinAccessRoleEnum
-            {
-                /// <summary>The user can read free/busy information.</summary>
-                [StringValue("freeBusyReader")]
-                FreeBusyReader,
-                /// <summary>The user can read and modify events and access control lists.</summary>
-                [StringValue("owner")]
-                Owner,
-                /// <summary>The user can read events that are not private.</summary>
-                [StringValue("reader")]
-                Reader,
-                /// <summary>The user can read and modify events.</summary>
-                [StringValue("writer")]
-                Writer,
-            }
-
-            /// <summary>Token specifying which result page to return. Optional.</summary>
-            [RequestParameter("pageToken", RequestParameterType.Query)]
-            public virtual string PageToken { get; set; }
-
-            /// <summary>Whether to include deleted calendar list entries in the result. Optional. The default is
-            /// False.</summary>
-            [RequestParameter("showDeleted", RequestParameterType.Query)]
-            public virtual System.Nullable<bool> ShowDeleted { get; set; }
-
-            /// <summary>Whether to show hidden entries. Optional. The default is False.</summary>
-            [RequestParameter("showHidden", RequestParameterType.Query)]
-            public virtual System.Nullable<bool> ShowHidden { get; set; }
-
-            /// <summary>Token obtained from the nextSyncToken field returned on the last page of results from the
-            /// previous list request. It makes the result of this list request contain only entries that have changed
-            /// since then. If only read-only fields such as calendar properties or ACLs have changed, the entry won't
-            /// be returned. All entries deleted and hidden since the previous list request will always be in the result
-            /// set and it is not allowed to set showDeleted neither showHidden to False. To ensure client state
-            /// consistency minAccessRole query parameter cannot be specified together with nextSyncToken. If the
-            /// syncToken expires, the server will respond with a 410 GONE response code and the client should clear its
-            /// storage and perform a full synchronization without any syncToken. Learn more about incremental
-            /// synchronization. Optional. The default is to return all entries.</summary>
-            [RequestParameter("syncToken", RequestParameterType.Query)]
-            public virtual string SyncToken { get; set; }
-
-
-            /// <summary>Gets or sets the body of this request.</summary>
-            private object Body { get; set; }
-
-            ///<summary>Returns the body of the request.</summary>
-            protected override object GetBody() => Body;
-
-            ///<summary>Gets the method name.</summary>
-            public override string MethodName => "watch";
-
-            ///<summary>Gets the HTTP method.</summary>
-            public override string HttpMethod => "POST";
-
-            ///<summary>Gets the REST path.</summary>
-            public override string RestPath => "users/me/calendarList/watch";
-
-            /// <summary>Initializes Watch parameter list.</summary>
-            protected override void InitParameters()
-            {
-                base.InitParameters();
-
-                RequestParameters.Add(
-                    "maxResults", new Parameter
-                    {
-                        Name = "maxResults",
-                        IsRequired = false,
-                        ParameterType = "query",
-                        DefaultValue = null,
-                        Pattern = null,
-                    });
-                RequestParameters.Add(
-                    "minAccessRole", new Parameter
-                    {
-                        Name = "minAccessRole",
-                        IsRequired = false,
-                        ParameterType = "query",
-                        DefaultValue = null,
-                        Pattern = null,
-                    });
-                RequestParameters.Add(
-                    "pageToken", new Parameter
-                    {
-                        Name = "pageToken",
-                        IsRequired = false,
-                        ParameterType = "query",
-                        DefaultValue = null,
-                        Pattern = null,
-                    });
-                RequestParameters.Add(
-                    "showDeleted", new Parameter
-                    {
-                        Name = "showDeleted",
-                        IsRequired = false,
-                        ParameterType = "query",
-                        DefaultValue = null,
-                        Pattern = null,
-                    });
-                RequestParameters.Add(
-                    "showHidden", new Parameter
-                    {
-                        Name = "showHidden",
-                        IsRequired = false,
-                        ParameterType = "query",
-                        DefaultValue = null,
-                        Pattern = null,
-                    });
-                RequestParameters.Add(
-                    "syncToken", new Parameter
-                    {
-                        Name = "syncToken",
-                        IsRequired = false,
-                        ParameterType = "query",
                         DefaultValue = null,
                         Pattern = null,
                     });

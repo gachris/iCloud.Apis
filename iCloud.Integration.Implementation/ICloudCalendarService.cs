@@ -34,6 +34,12 @@ namespace iCloud.Integration.Implementation
             return service.CalendarList.Delete(calendarId).Execute();
         }
 
+        public static CalendarListEntry UpdateCalendar(UserCredential credential, CalendarListEntry calendarListEntry, string calendarId)
+        {
+            var service = GetService(credential);
+            return service.CalendarList.Update(calendarListEntry, calendarId).Execute();
+        }
+
         #endregion
 
 

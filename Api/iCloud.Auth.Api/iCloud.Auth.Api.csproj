@@ -20,7 +20,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="iCloud.Core.Api" Version="1.0.0" />
+	  <ProjectReference Include="..\iCloud.Core.Api\iCloud.Core.Api.csproj" />
 	</ItemGroup>
 
 	<PropertyGroup>
