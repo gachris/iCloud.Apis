@@ -10,7 +10,7 @@ namespace iCloud.Apis.People
     public class ContactGroup : vCard
     {
         [JsonProperty("etag")]
-        public virtual string Etag { get; set; }
+        public virtual string ETag { get; set; }
 
         [JsonProperty("groupType")]
         public virtual string GroupType { get; set; }
@@ -19,7 +19,7 @@ namespace iCloud.Apis.People
         public virtual int? MemberCount { get; set; }
 
         [JsonProperty("memberResourceNames")]
-        public virtual IList<string> MemberResourceNames { get; set; }
+        public virtual IList<string> MemberResourceNames { get; }
 
         [JsonProperty("resourceName")]
         public virtual string ResourceName { get; set; }
@@ -32,6 +32,7 @@ namespace iCloud.Apis.People
 
         public ContactGroup() : base()
         {
+            GroupType = "group";
             MemberResourceNames = new List<string>();
         }
 
@@ -45,6 +46,26 @@ namespace iCloud.Apis.People
         {
             var standardReader = new CardStandardReader();
             standardReader.ReadInto(this, new StringReader(content));
+        }
+
+        public bool AddMemberResource(string uniqueId)
+        {
+            if (!this.MemberResourceNames.Contains(uniqueId))
+            {
+                this.MemberResourceNames.Add(uniqueId);
+                return true;
+            }
+            return false;
+        }
+
+        public bool RemoveMemberResource(string uniqueId)
+        {
+            if (this.MemberResourceNames.Contains(uniqueId))
+            {
+                this.MemberResourceNames.Remove(uniqueId);
+                return true;
+            }
+            return false;
         }
     }
 }

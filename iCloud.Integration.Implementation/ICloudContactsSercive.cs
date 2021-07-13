@@ -6,44 +6,42 @@ namespace iCloud.Integration.Implementation
 {
     public class ICloudContactsSercive
     {
-        public static PersonList GetContacts(UserCredential credential, string nextPageToken = null)
+        public static PersonList GetContacts(UserCredential credential, string resourceName, string nextPageToken = null)
         {
             var service = GetService(credential);
-            PeopleResource.ListRequest request = service.People.List("card");
+            PeopleResource.ListRequest request = service.People.List(resourceName);
             request.MaxResults = 1000;
             request.PageToken = nextPageToken;
             return request.Execute();
         }
 
-        public static Person GetContact(UserCredential credential, string personId)
+        public static Person GetContact(UserCredential credential, string personId, string resourceName)
         {
             var service = GetService(credential);
-            PeopleResource.GetRequest request = service.People.Get(personId, "card");
+            PeopleResource.GetRequest request = service.People.Get(personId, resourceName);
             return request.Execute();
         }
 
-        public static Person AddContact(UserCredential credential, Person person)
+        public static Person AddContact(UserCredential credential, Person person, string resourceName)
         {
             var service = GetService(credential);
-            PeopleResource.InsertRequest request = service.People.Insert(person, "card");
+            PeopleResource.InsertRequest request = service.People.Insert(person, resourceName);
             return request.Execute();
         }
 
-        public static Person UpdateContact(UserCredential credential, Person person, string personId, string etag)
+        public static Person UpdateContact(UserCredential credential, Person person, string personId, string etag, string resourceName)
         {
             var service = GetService(credential);
-            PeopleResource.UpdateRequest request = service.People.Update(person, personId, etag, "card");
+            PeopleResource.UpdateRequest request = service.People.Update(person, personId, etag, resourceName);
             return request.Execute();
         }
 
-        public static string DeleteContact(UserCredential credential, string personId)
+        public static string DeleteContact(UserCredential credential, string personId, string resourceName)
         {
             var service = GetService(credential);
-            PeopleResource.DeleteRequest request = service.People.Delete(personId, "card");
+            PeopleResource.DeleteRequest request = service.People.Delete(personId, resourceName);
             return request.Execute();
         }
-
-        #region Services
 
         private static PeopleService GetService(UserCredential credential)
         {
@@ -57,7 +55,5 @@ namespace iCloud.Integration.Implementation
             }
             else throw new UnauthorizedAccessException();
         }
-
-        #endregion
     }
 }

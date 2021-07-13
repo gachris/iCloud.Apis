@@ -1,46 +1,53 @@
 ﻿using iCloud.Apis.Auth;
 using iCloud.Apis.People;
-using iCloud.Apis.People.Responses;
 using System;
-using System.Collections.Generic;
 
 namespace iCloud.Integration.Implementation
 {
     public class ICloudContactGroupsService
     {
-        #region Retrieve ContactGroups
 
-        public static IList<ContactGroup> GetContactGroups(UserCredential credential)
+        public static ContactGroupsList GetContactGroups(UserCredential credential, string resourceName)
         {
             var service = GetService(credential);
-            return service.GetContactGroups(credential);
+            return service.ContactGroups.List(resourceName).Execute();
         }
 
-        #endregion
-
-        public static ModifyContactGroupMembersResponse ModifyMembers(UserCredential credential, IList<string> resourceNamesToAdd, IList<string> resourceNamesToRemove, string etag, string uniqueId)
+        public static ContactGroup GetContactGroup(UserCredential credential, string uniqueId, string resourceName)
         {
             var service = GetService(credential);
-            ModifyContactGroupMembersRequest request = new ModifyContactGroupMembersRequest
-            {
-                ResourceNamesToAdd = resourceNamesToAdd,
-                ResourceNamesToRemove = resourceNamesToRemove,
-                ETag = etag
-            };
-            return service.ModifyMembers(credential, request, "card", uniqueId);
+            return service.ContactGroups.Get(uniqueId, resourceName).Execute();
         }
 
-        #region Services
+        public static ContactGroup AddContactGroup(UserCredential credential, ContactGroup contactGroup, string resourceName)
+        {
+            var service = GetService(credential);
+            return service.ContactGroups.Insert(contactGroup, resourceName).Execute();
+        }
 
-        private static ContactGroupsService GetService(UserCredential credential)
+        public static object UpdateContactGroup(UserCredential credential, ContactGroup contactGroup, string uniqueId, string resourceName)
+        {
+            var service = GetService(credential);
+            return service.ContactGroups.Update(contactGroup, uniqueId, resourceName).Execute();
+        }
+
+        public static object DeleteContactGroup(UserCredential credential, string uniqueId, string resourceName)
+        {
+            var service = GetService(credential);
+            return service.ContactGroups.Delete(uniqueId, resourceName).Execute();
+        }
+
+        private static PeopleService GetService(UserCredential credential)
         {
             if (credential != null)
             {
-                return new ContactGroupsService();
+                return new PeopleService(new iCloud.Apis.Core.Services.BaseClientService.Initializer()
+                {
+                    ApplicationName = "iCloud.SyncApp",
+                    HttpClientInitializer = credential
+                });
             }
             else throw new UnauthorizedAccessException();
         }
-
-        #endregion
     }
 }

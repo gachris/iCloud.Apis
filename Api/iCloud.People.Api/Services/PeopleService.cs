@@ -15,6 +15,8 @@ namespace iCloud.Apis.People
         public PeopleService(Initializer initializer) : base(initializer)
         {
             People = new PeopleResource(this);
+            ContactGroups = new ContactGroupsResource(this);
+            IdentityCard = new IdentityCardResource(this);
             BaseUri = ((UserCredential)initializer.HttpClientInitializer).Token.Tokeninfo.ContactsPrincipal.PrincipalHomeSetUrl;
             BasePath = ((UserCredential)initializer.HttpClientInitializer).Token.Tokeninfo.ContactsPrincipal.HomeSetUrl;
         }
@@ -27,7 +29,13 @@ namespace iCloud.Apis.People
 
         public override IList<string> Features => new string[0];
 
-        /// <summary>Gets the CalendarList resource.</summary>
+        /// <summary>Gets the People resource.</summary>
         public virtual PeopleResource People { get; }
+
+        /// <summary>Gets the ContactGroups resource.</summary>
+        public virtual ContactGroupsResource ContactGroups { get; }
+
+        /// <summary>Gets the Card resource.</summary>
+        public virtual IdentityCardResource IdentityCard { get; }
     }
 }

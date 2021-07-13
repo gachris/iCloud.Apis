@@ -2,15 +2,12 @@
 using iCloud.Apis.Core.Request;
 using iCloud.Apis.Core.Responses;
 using iCloud.Apis.People.Request;
-using iCloud.Apis.People.Responses;
 using iCloud.Apis.People.Types;
 using iCloud.Apis.Util;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net;
-using System.Text;
 
 namespace iCloud.Apis.People
 {
@@ -29,6 +26,7 @@ namespace iCloud.Apis.People
                 {
                     Displayname = new Displayname(),
                     Resourcetype = new Resourcetype(),
+                    Supportedreportset = new Supportedreportset()
                 }
             };
             var contactsListPropfindContent = XmlSerializerHelper.Serialize(contactsListPropfind);
@@ -94,7 +92,7 @@ namespace iCloud.Apis.People
                 card = new ContactGroup(response.Propstat.Prop.Addressdata.Value)
                 {
                     Url = response.Url,
-                    Etag = response.Propstat.Prop.Getetag.Value,
+                    ETag = response.Propstat.Prop.Getetag.Value,
                     FullUrl = String.Concat(credential.Token.Tokeninfo.ContactsPrincipal.HomeSetUrl, response.Url)
                 };
                 listItems.Add(card);
@@ -103,13 +101,8 @@ namespace iCloud.Apis.People
             return listItems;
         }
 
-        public ModifyContactGroupMembersResponse ModifyMembers(UserCredential credential, ModifyContactGroupMembersRequest request, string resourceName, string uniqueId)
+        public ContactGroup GetContactGroup(UserCredential credential, string uniqueId)
         {
-            if (credential == null)
-            {
-                throw new UnauthorizedAccessException();
-            }
-
             var headers = new WebHeaderCollection
             {
                  { "Authorization", $"Basic {credential.Token.AccessToken}" },
@@ -140,57 +133,17 @@ namespace iCloud.Apis.People
 
             var addressBookQueryContent = XmlSerializerHelper.Serialize(addressBookQuery);
 
-            var addressbookurl = string.Concat(credential.Token.Tokeninfo.ContactsPrincipal.PrincipalHomeSetUrl, resourceName);
+            var addressbookurl = string.Concat(credential.Token.Tokeninfo.ContactsPrincipal.PrincipalHomeSetUrl, "card");
 
             Multistatus<Prop> addressBookDataMultistatus = HttpWebRequestHelper.ExectueMethod<Multistatus<Prop>>(addressbookurl, ApiMethod.REPORT, addressBookQueryContent, ApiContentType.APPLICATION_XML, headers);
 
             var response = addressBookDataMultistatus.Responses.FirstOrDefault();
-            var contactGroup = new ContactGroup(response.Propstat.Prop.Addressdata.Value)
+            return new ContactGroup(response.Propstat.Prop.Addressdata.Value)
             {
                 Url = response.Url,
-                Etag = response.Propstat.Prop.Getetag.Value,
+                ETag = response.Propstat.Prop.Getetag.Value,
                 FullUrl = String.Concat(credential.Token.Tokeninfo.ContactsPrincipal.HomeSetUrl, response.Url)
             };
-
-            if (request.ResourceNamesToAdd?.Any() ?? false)
-            {
-                foreach (var resourceNameToAdd in request.ResourceNamesToAdd)
-                {
-                    if (!contactGroup.MemberResourceNames.Contains(resourceNameToAdd))
-                        contactGroup.MemberResourceNames.Add(resourceNameToAdd);
-                }
-            }
-
-            if (request.ResourceNamesToRemove?.Any() ?? false)
-            {
-                foreach (var resourceNameToRemove in request.ResourceNamesToRemove)
-                {
-                    if (contactGroup.MemberResourceNames.Contains(resourceNameToRemove))
-                        contactGroup.MemberResourceNames.Remove(resourceNameToRemove);
-                }
-            }
-
-            var contactgroupurl = string.Concat(addressbookurl, "/", uniqueId, ".vcf");
-
-            headers.Add("If-Match", request.ETag);
-
-            using (MemoryStream stream = new MemoryStream())
-            {
-                using (StreamWriter textWriter = new StreamWriter(stream))
-                {
-                    CardStandardWriter writer = new CardStandardWriter();
-                    writer.Write(contactGroup, textWriter, Encoding.UTF8.WebName);
-                    textWriter.Flush();
-
-                    stream.Seek(0, SeekOrigin.Begin);
-                    using (StreamReader streamReader = new StreamReader(stream))
-                    {
-                        var content = streamReader.ReadToEnd();
-                        HttpWebRequestHelper.ExectueMethod(contactgroupurl, ApiMethod.PUT, content, ApiContentType.TEXT_VCARD, headers);
-                        return new ModifyContactGroupMembersResponse();
-                    }
-                }
-            }
         }
     }
 }

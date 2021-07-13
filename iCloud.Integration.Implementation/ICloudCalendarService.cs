@@ -8,8 +8,6 @@ namespace iCloud.Integration.Implementation
 {
     public class ICloudCalendarService
     {
-        #region Retrieve Calendar
-
         public static CalendarListEntry InsertCalendar(UserCredential credential, CalendarListEntry calendarListEntry)
         {
             var service = GetService(credential);
@@ -40,11 +38,6 @@ namespace iCloud.Integration.Implementation
             return service.CalendarList.Update(calendarListEntry, calendarId).Execute();
         }
 
-        #endregion
-
-
-        #region Retrieve Event
-
         public static IICalendarCollection GetEvents(UserCredential credential, DateTime? timeFrom, DateTime? timeTo, string calendarId, string nextPageToken = null)
         {
             var service = GetService(credential);
@@ -67,20 +60,12 @@ namespace iCloud.Integration.Implementation
             return request.Execute();
         }
 
-        #endregion
-
-        #region Insert Event
-
         public static Event AddEvent(UserCredential credential, Event newEvent, string calendarId)
         {
             var service = GetService(credential);
             EventsResource.InsertRequest request = service.Events.Insert(newEvent, calendarId);
             return request.Execute();
         }
-
-        #endregion
-
-        #region Update Event
 
         public static Event UpdateEvent(UserCredential credential, Event editEvent, string eventId, string calendarId)
         {
@@ -89,20 +74,12 @@ namespace iCloud.Integration.Implementation
             return request.Execute();
         }
 
-        #endregion
-
-        #region Delete Event
-
         public static string DeleteEvent(UserCredential credential, string calendarId, string eventId)
         {
             var service = GetService(credential);
             EventsResource.DeleteRequest request = service.Events.Delete(calendarId, eventId);
             return request.Execute();
         }
-
-        #endregion
-
-        #region Services
 
         private static CalendarService GetService(UserCredential credential)
         {
@@ -116,7 +93,5 @@ namespace iCloud.Integration.Implementation
             }
             else throw new UnauthorizedAccessException();
         }
-
-        #endregion
     }
 }

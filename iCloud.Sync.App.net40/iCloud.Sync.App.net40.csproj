@@ -38,6 +38,7 @@
       <HintPath>..\Api\DLLs\Ical.Net.2.3.0\Ical.Net.dll</HintPath>
     </Reference>
     <Reference Include="Ical.Net.Collections, Version=2.1.0.30341, Culture=neutral, PublicKeyToken=33517596b1f7d484" />
+    <Reference Include="ICalVCard, Version=1.0.0.4, Culture=neutral, PublicKeyToken=26a5cf2f11806274" />
     <Reference Include="Microsoft.Threading.Tasks, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.dll</HintPath>
     </Reference>

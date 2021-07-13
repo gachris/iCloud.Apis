@@ -1,4 +1,6 @@
-﻿using iCloud.Apis.Core.Responses;
+﻿using iCloud.Apis.Auth;
+using iCloud.Apis.Core.Request;
+using iCloud.Apis.Core.Responses;
 using iCloud.Apis.Core.Services;
 using iCloud.Apis.People.Request;
 using iCloud.Apis.People.Types;
@@ -13,16 +15,16 @@ using System.Threading.Tasks;
 
 namespace iCloud.Apis.People
 {
-    /// <summary>The "calendarList" collection of methods.</summary>
-    public class PeopleResource
+    /// <summary>The "ContactGroups" collection of methods.</summary>
+    public class ContactGroupsResource
     {
-        private const string Resource = "people";
+        private const string _resource = "contactGroups";
 
         /// <summary>The service which this resource belongs to.</summary>
         private readonly IClientService service;
 
         /// <summary>Constructs a new resource.</summary>
-        public PeopleResource(IClientService service)
+        public ContactGroupsResource(IClientService service)
         {
             this.service = service;
         }
@@ -45,7 +47,7 @@ namespace iCloud.Apis.People
 
         /// <summary>Inserts an existing calendar into the user's calendar list.</summary>
         /// <param name="body">The body of the request.</param>
-        public virtual InsertRequest Insert(Person body, string resourceName)
+        public virtual InsertRequest Insert(ContactGroup body, string resourceName)
         {
             return new InsertRequest(service, body, resourceName);
         }
@@ -60,9 +62,9 @@ namespace iCloud.Apis.People
         /// <param name="body">The body of the request.</param>
         /// <param name="calendarId">Calendar identifier. To retrieve calendar IDs call the calendarList.list method. If you
         /// want to access the primary calendar of the currently logged in user, use the "primary" keyword.</param>
-        public virtual UpdateRequest Update(Person body, string uniqueId, string etag, string resourceName)
+        public virtual UpdateRequest Update(ContactGroup body, string uniqueId, string resourceName)
         {
-            return new UpdateRequest(service, body, uniqueId, etag, resourceName);
+            return new UpdateRequest(service, body, uniqueId, resourceName);
         }
 
         /// <summary>Removes a calendar from the user's calendar list.</summary>
@@ -114,7 +116,7 @@ namespace iCloud.Apis.People
         }
 
         /// <summary>Returns a calendar from the user's calendar list.</summary>
-        public class GetRequest : PeopleBaseServiceRequest<Person>
+        public class GetRequest : PeopleBaseServiceRequest<ContactGroup>
         {
             /// <summary>Constructs a new Get request.</summary>
             public GetRequest(IClientService service, string uniqueId, string resourceName) : base(service)
@@ -160,13 +162,13 @@ namespace iCloud.Apis.People
                 });
             }
 
-            protected override async Task<Person> ParseResponse(HttpResponseMessage response)
+            protected override async Task<ContactGroup> ParseResponse(HttpResponseMessage response)
             {
                 if (response.IsSuccessStatusCode)
                 {
                     string content = await this.Service.DeserializeResponse(response);
                     if (!String.IsNullOrEmpty(content))
-                        return new Person(content);
+                        return new ContactGroup(content);
                     else return default;
                 }
                 RequestError requestError = await this.Service.DeserializeError(response).ConfigureAwait(false);
@@ -179,10 +181,10 @@ namespace iCloud.Apis.People
         }
 
         /// <summary>Inserts an existing calendar into the user's calendar list.</summary>
-        public class InsertRequest : PeopleBaseServiceRequest<Person>
+        public class InsertRequest : PeopleBaseServiceRequest<ContactGroup>
         {
             /// <summary>Constructs a new Insert request.</summary>
-            public InsertRequest(IClientService service, Person body, string resourceName) : base(service)
+            public InsertRequest(IClientService service, ContactGroup body, string resourceName) : base(service)
             {
                 this.Body = body;
 
@@ -201,7 +203,7 @@ namespace iCloud.Apis.People
             public virtual string UniqueId { get; }
 
             /// <summary>Gets or sets the body of this request.</summary>
-            private Person Body { get; set; }
+            private ContactGroup Body { get; set; }
 
             ///<summary>Returns the body of the request.</summary>
             protected override object GetBody()
@@ -256,7 +258,7 @@ namespace iCloud.Apis.People
                 });
             }
 
-            protected override async Task<Person> ParseResponse(HttpResponseMessage response)
+            protected override async Task<ContactGroup> ParseResponse(HttpResponseMessage response)
             {
                 if (response.IsSuccessStatusCode)
                 {
@@ -273,14 +275,17 @@ namespace iCloud.Apis.People
         }
 
         /// <summary>Returns the calendars on the user's calendar list.</summary>
-        public class ListRequest : PeopleBaseServiceRequest<PersonList>
+        public class ListRequest : PeopleBaseServiceRequest<ContactGroupsList>
         {
             /// <summary>Constructs a new List request.</summary>
             public ListRequest(IClientService service, string resourceName) : base(service)
             {
                 this.InitParameters();
-                ResourceName = resourceName;
+                this.ResourceName = resourceName;
             }
+
+            [RequestParameter("resourceName", RequestParameterType.Path)]
+            public virtual string ResourceName { get; }
 
             /// <summary>Maximum number of entries returned on one result page. By default the value is 100 entries. The
             /// page size can never be larger than 250 entries. Optional.</summary>
@@ -336,10 +341,6 @@ namespace iCloud.Apis.People
             ///<summary>Gets the HTTP method.</summary>
             public override string HttpMethod => ApiMethod.REPORT;
 
-            ///<summary>Gets the resource name.</summary>
-            [RequestParameter("resourceName", RequestParameterType.Path)]
-            public virtual string ResourceName { get; }
-
             ///<summary>Gets the REST path.</summary>
             public override string RestPath => "{resourceName}";
 
@@ -348,35 +349,46 @@ namespace iCloud.Apis.People
                 { "Depth", "1" }
             };
 
+            /// <summary>Initializes Insert parameter list.</summary>
+            protected override void InitParameters()
+            {
+                base.InitParameters();
+
+                this.RequestParameters.Add("resourceName", new Parameter
+                {
+                    Name = "resourceName",
+                    IsRequired = true,
+                    ParameterType = "path",
+                });
+            }
+
             protected override object GetBody()
             {
                 var addressBookQuery = new Addressbookquery
                 {
+                    Filter = new Filters { Type = "anyof" },
                     Prop = new Prop()
                     {
-                        Getetag = Getetag.Empty,
+                        Getetag = new Getetag(),
                         Addressdata = new Addressdata()
                     }
                 };
+
+                var propfilter = new Propfilter { Name = "X-ADDRESSBOOKSERVER-KIND", };
+                var textmatch = new TextMatch
+                {
+                    Collation = "i;unicode-casemap",
+                    Negatecondition = "no",
+                    Matchtype = "contains",
+                    Text = "group"
+                };
+
+                propfilter.Textmatch = new List<TextMatch> { textmatch };
+                addressBookQuery.Filter.Propfilter = new List<Propfilter> { propfilter };
                 return addressBookQuery;
             }
 
-            /// <summary>Initializes List parameter list.</summary>
-            protected override void InitParameters()
-            {
-                base.InitParameters();
-                RequestParameters.Add(
-                    "resourceName", new Parameter
-                    {
-                        Name = "resourceName",
-                        IsRequired = true,
-                        ParameterType = "path",
-                        DefaultValue = null,
-                        Pattern = null,
-                    });
-            }
-
-            protected override async Task<PersonList> ParseResponse(HttpResponseMessage response)
+            protected override async Task<ContactGroupsList> ParseResponse(HttpResponseMessage response)
             {
                 if (response.IsSuccessStatusCode)
                 {
@@ -385,36 +397,21 @@ namespace iCloud.Apis.People
                     {
                         try
                         {
-                            var personList = new PersonList();
-                            var contactGroupList = new ContactGroupsList();
+                            ContactGroup card = null;
+                            var listItems = new ContactGroupsList();
 
                             foreach (var multistatusItem in multistatus.Responses)
                             {
-                                if (multistatusItem.Propstat.Prop.Addressdata.Value.Contains("X-ADDRESSBOOKSERVER-KIND:group"))
+                                card = new ContactGroup(multistatusItem.Propstat.Prop.Addressdata.Value)
                                 {
-                                    var contactGroup = new ContactGroup(multistatusItem.Propstat.Prop.Addressdata.Value) { ETag = multistatusItem.Propstat.Prop.Getetag.Value };
-                                    contactGroupList.Add(contactGroup);
-                                }
-                                else
-                                {
-                                    var person = new Person(multistatusItem.Propstat.Prop.Addressdata.Value) { Etag = multistatusItem.Propstat.Prop.Getetag.Value };
-                                    personList.Add(person);
-                                }
+                                    Url = multistatusItem.Url,
+                                    ETag = multistatusItem.Propstat.Prop.Getetag.Value,
+                                    FullUrl = String.Concat(((UserCredential)Service.HttpClientInitializer).Token.Tokeninfo.ContactsPrincipal.HomeSetUrl, multistatusItem.Url)
+                                };
+                                listItems.Add(card);
                             }
 
-                            foreach (var contactGoup in contactGroupList)
-                                personList.Where(x => contactGoup.MemberResourceNames.Contains(x.UniqueId)).ToList().ForEach(x => x.Memberships.Add(new Membership()
-                                {
-                                    ETag = contactGoup.ETag,
-                                    ContactGroupMembership = new ContactGroupMembership()
-                                    {
-                                        ETag = contactGoup.ETag,
-                                        ContactGroupId = contactGoup.UniqueId,
-                                        ContactGroupResourceName = contactGoup.FullUrl
-                                    }
-                                }));
-
-                            return personList;
+                            return listItems;
                         }
                         catch (InvalidCastException)
                         {
@@ -436,26 +433,27 @@ namespace iCloud.Apis.People
         public class UpdateRequest : PeopleBaseServiceRequest<Person>
         {
             /// <summary>Constructs a new Update request.</summary>
-            public UpdateRequest(IClientService service, Person body, string uniqueId, string etag, string resourceName) : base(service)
+            public UpdateRequest(IClientService service, ContactGroup body, string uniqueId, string resourceName) : base(service)
             {
+                this.UniqueId = uniqueId;
                 this.ResourceName = resourceName;
                 this.Body = body;
-                UniqueId = uniqueId;
-                this.Etag = etag;
-                Headers.Add("If-Match", Etag);
+                this.Headers = new Dictionary<string, string>();
+                this.Etag = this.Body.ETag;
+                this.Headers.Add("If-Match", Etag);
                 this.InitParameters();
             }
 
+            [RequestParameter("resourceName", RequestParameterType.Path)]
+            public virtual string ResourceName { get; }
+
             /// <summary>Calendar identifier. To retrieve calendar IDs call the calendarList.list method. If you want to
             /// access the primary calendar of the currently logged in user, use the "primary" keyword.</summary>
-            [RequestParameter("resourceName", RequestParameterType.Path)]
-            public virtual string ResourceName { get; private set; }
+            [RequestParameter("uniqueId", RequestParameterType.Path)]
+            public virtual string UniqueId { get; private set; }
 
             /// <summary>Gets or sets the body of this request.</summary>
-            private Person Body { get; set; }
-
-            [RequestParameter("uniqueId", RequestParameterType.Path)]
-            public string UniqueId { get; }
+            private ContactGroup Body { get; set; }
 
             public string Etag { get; }
 
@@ -470,7 +468,7 @@ namespace iCloud.Apis.People
 
             public override string ContentType => ApiContentType.TEXT_VCARD;
 
-            public override IDictionary<string, string> Headers => new Dictionary<string, string>();
+            public override IDictionary<string, string> Headers { get; }
 
             ///<summary>Returns the body of the request.</summary>
             protected override object GetBody()
@@ -489,22 +487,6 @@ namespace iCloud.Apis.People
                     }
                 }
             }
-
-            protected override async Task<Person> ParseResponse(HttpResponseMessage response)
-            {
-                if (response.IsSuccessStatusCode)
-                {
-                    string status = await this.Service.DeserializeResponse(response);
-                    return Body;
-                }
-                RequestError requestError = await this.Service.DeserializeError(response).ConfigureAwait(false);
-                throw new ICloudApiException(this.Service.Name, requestError.ToString())
-                {
-                    Error = requestError,
-                    HttpStatusCode = response.StatusCode
-                };
-            }
-
 
             /// <summary>Initializes Update parameter list.</summary>
             protected override void InitParameters()
