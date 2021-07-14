@@ -42,10 +42,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Properties\" />
-	</ItemGroup>
-
-	<ItemGroup>
 	  <ProjectReference Include="..\iCloud.Auth.Api\iCloud.Auth.Api.csproj" />
 	</ItemGroup>
 
